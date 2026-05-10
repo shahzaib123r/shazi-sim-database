@@ -34,35 +34,25 @@ A modern and stylish project with advanced design, smooth UI, and powerful funct
 
 </p>
 
----
-
-# 📸 Preview
-
-<p align="center">
-
-<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&color=0:00d9ff,100:7b00ff&height=120&section=header&text=PROJECT+PREVIEW&fontSize=35&fontColor=ffffff"/>
-
-</p>
-
----
+--
 
 # 🌐 Connect With Me
 
 <p align="center">
 
-<a href="https://instagram.com/YOUR_USERNAME">
+<a href="https://instagram.com/hy.shazi">
 <img src="https://img.shields.io/badge/Instagram-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white">
 </a>
 
-<a href="https://github.com/YOUR_GITHUB">
+<a href="https://github.com/shahzaib123r">
 <img src="https://img.shields.io/badge/GitHub-121212?style=for-the-badge&logo=github&logoColor=white">
 </a>
 
-<a href="https://youtube.com/@YOUR_CHANNEL">
+<a href="https://youtube.com/@levi-md">
 <img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white">
 </a>
 
-<a href="https://t.me/YOUR_USERNAME">
+<a href="https://t.me/hy_shazi">
 <img src="https://img.shields.io/badge/Telegram-0088cc?style=for-the-badge&logo=telegram&logoColor=white">
 </a>
 
@@ -74,9 +64,9 @@ A modern and stylish project with advanced design, smooth UI, and powerful funct
 
 <p align="center">
 
-<img src="https://github-readme-stats.vercel.app/api?username=YOUR_GITHUB&show_icons=true&theme=tokyonight&hide_border=true" width="49%">
+<img src="https://github-readme-stats.vercel.app/api?username=shahzaib123r&show_icons=true&theme=tokyonight&hide_border=true" width="49%">
 
-<img src="https://github-readme-streak-stats.herokuapp.com?user=YOUR_GITHUB&theme=tokyonight&hide_border=true" width="49%">
+<img src="https://github-readme-streak-stats.herokuapp.com?user=shahzaib123r&theme=tokyonight&hide_border=true" width="49%">
 
 </p>
 
@@ -86,7 +76,7 @@ A modern and stylish project with advanced design, smooth UI, and powerful funct
 
 <p align="center">
 
-<img src="https://komarev.com/ghpvc/?username=YOUR_GITHUB&label=PROFILE+VIEWS&color=blueviolet&style=for-the-badge">
+<img src="https://komarev.com/ghpvc/?username=shahzaib123r&label=PROFILE+VIEWS&color=blueviolet&style=for-the-badge">
 
 </p>
 
