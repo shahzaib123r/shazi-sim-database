@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Quantum Search</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at top left, #32004f 0%, transparent 25%),
+        radial-gradient(circle at bottom right, #001e4d 0%, transparent 30%),
+        #040816;
+      color: white;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      width: 200%;
+      height: 200%;
+      background:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 45px 45px;
+      animation: gridMove 20s linear infinite;
+      z-index: -2;
+    }
+
+    @keyframes gridMove {
+      0% {
+        transform: translate(0, 0);
+      }
+
+      100% {
+        transform: translate(-45px, -45px);
+      }
+    }
+
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: .4;
+      z-index: -1;
+      animation: move 15s infinite alternate ease-in-out;
+    }
+
+    .blob1 {
+      width: 300px;
+      height: 300px;
+      background: #00d9ff;
+      top: 5%;
+      left: 5%;
+    }
+
+    .blob2 {
+      width: 350px;
+      height: 350px;
+      background: #9b00ff;
+      bottom: 5%;
+      right: 5%;
+    }
+
+    @keyframes move {
+      from {
+        transform: translateY(0px) translateX(0px);
+      }
+
+      to {
+        transform: translateY(40px) translateX(30px);
+      }
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: auto;
+      padding: 35px 20px;
+    }
+
+    .top {
+      text-align: center;
+      margin-top: 30px;
+      animation: fadeTop 1s ease;
+    }
+
+    @keyframes fadeTop {
+      from {
+        opacity: 0;
+        transform: translateY(-40px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .logo {
+      font-size: 70px;
+      font-weight: 800;
+      background: linear-gradient(90deg, #00d9ff, #b300ff, #ff00aa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 3px;
+      text-shadow: 0 0 25px rgba(0, 217, 255, .25);
+    }
+
+    .sub {
+      margin-top: 10px;
+      color: #c8c8c8;
+      font-size: 18px;
+    }
+
+    .search-panel {
+      margin-top: 45px;
+      background: rgba(255, 255, 255, .06);
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: 30px;
+      padding: 25px;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, .45);
+      animation: fadePanel 1.2s ease;
+    }
+
+    @keyframes fadePanel {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .search-box {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .search-box input {
+      flex: 1;
+      height: 70px;
+      border: none;
+      outline: none;
+      border-radius: 22px;
+      background: rgba(0, 0, 0, .35);
+      border: 1px solid rgba(255,255,255,.08);
+      color: white;
+      font-size: 18px;
+      padding: 0 25px;
+      transition: .3s;
+    }
+
+    .search-box input:focus {
+      border-color: #00d9ff;
+      box-shadow: 0 0 20px rgba(0,217,255,.25);
+    }
+
+    .search-box input::placeholder {
+      color: #999;
+    }
+
+    .search-btn {
+      width: 180px;
+      height: 70px;
+      border: none;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #00d9ff, #7b00ff);
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .search-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0,217,255,.25);
+    }
+
+    .search-btn::before {
+      content: "";
+      position: absolute;
+      width: 120px;
+      height: 200%;
+      background: rgba(255,255,255,.25);
+      transform: rotate(25deg);
+      left: -140px;
+      top: -50px;
+      transition: .6s;
+    }
+
+    .search-btn:hover::before {
+      left: 220px;
+    }
+
+    .loading {
+      display: none;
+      margin-top: 25px;
+      text-align: center;
+      color: #d7d7d7;
+      font-size: 16px;
+    }
+
+    .spinner {
+      width: 28px;
+      height: 28px;
+      border: 3px solid rgba(255,255,255,.2);
+      border-top-color: #00d9ff;
+      border-radius: 50%;
+      margin: auto;
+      margin-bottom: 10px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .results {
+      margin-top: 35px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px;
+    }
+
+    .card {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 28px;
+      overflow: hidden;
+      backdrop-filter: blur(15px);
+      position: relative;
+      animation: cardShow .5s ease;
+      transition: .3s;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,.35);
+    }
+
+    @keyframes cardShow {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card-top {
+      padding: 25px;
+      background: linear-gradient(135deg,
+          rgba(0,217,255,.18),
+          rgba(179,0,255,.18));
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .profile {
+      width: 75px;
+      height: 75px;
+      border-radius: 24px;
+      background: linear-gradient(135deg,#00d9ff,#7b00ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .card-top h2 {
+      font-size: 26px;
+      margin-bottom: 6px;
+    }
+
+    .network {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 40px;
+      background: rgba(255,255,255,.08);
+      font-size: 13px;
+      color: #cdefff;
+    }
+
+    .card-body {
+      padding: 25px;
+    }
+
+    .field {
+      margin-bottom: 18px;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.05);
+      transition: .3s;
+    }
+
+    .field:hover {
+      background: rgba(255,255,255,.06);
+    }
+
+    .label {
+      font-size: 12px;
+      color: #9f9f9f;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .value {
+      font-size: 17px;
+      font-weight: 600;
+      word-break: break-word;
+    }
+
+    .copy-btn {
+      width: 100%;
+      height: 55px;
+      border: none;
+      border-radius: 18px;
+      background: linear-gradient(135deg,#00d9ff,#7b00ff);
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .3s;
+    }
+
+    .copy-btn:hover {
+      transform: scale(1.02);
+    }
+
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      color: #8d8d8d;
+      font-size: 14px;
+    }
+
+    @media(max-width:700px) {
+
+      .logo {
+        font-size: 42px;
+      }
+
+      .search-box {
+        flex-direction: column;
+      }
+
+      .search-btn {
+        width: 100%;
+      }
+
+      .search-box input {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+
+  <div class="container">
+
+    <div class="top">
+      <div class="logo">SHAZI SIM DATABASE</div>
+
+      <div class="sub">
+        Advanced Information Dashboard
+      </div>
+    </div>
+
+    <div class="search-panel">
+
+      <div class="search-box">
+
+        <input type="text"
+          id="number"
+          placeholder="Enter number here with 0">
+
+        <button class="search-btn"
+          onclick="searchData()">
+          SEARCH
+        </button>
+
+      </div>
+
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        Searching Database...
+      </div>
+
+      <div class="results"
+        id="results"></div>
+
+    </div>
+
+    <div class="footer">
+      POWERED BY SHAHZAIB
+    </div>
+
+  </div>
+
+  <script>
+
+    async function searchData() {
+
+      const number =
+        document.getElementById("number").value;
+
+      const results =
+        document.getElementById("results");
+
+      const loading =
+        document.getElementById("loading");
+
+      if (number == "") {
+        alert("Enter number");
+        return;
+      }
+
+      results.innerHTML = "";
+      loading.style.display = "block";
+
+      try {
+
+        
+
+
+       const response = await fetch(
+  `https://sim-info-api.wasif-ali.workers.dev/?search=${number}`
+);
+
+const data = await response.json();
+
+
+        loading.style.display = "none";
+
+        data.records.forEach(user => {
+
+          results.innerHTML += `
+
+          <div class="card">
+
+            <div class="card-top">
+
+              <div class="profile">
+                ${user.name.charAt(0)}
+              </div>
+
+              <h2>${user.name}</h2>
+
+              <div class="network">
+                ${user.network}
+              </div>
+
+            </div>
+
+            <div class="card-body">
+
+              <div class="field">
+                <div class="label">
+                  MOBILE NUMBER
+                </div>
+
+                <div class="value">
+                  ${user.mobile}
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="label">
+                  CNIC NUMBER
+                </div>
+
+                <div class="value">
+                  ${user.cnic}
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="label">
+                  ADDRESS
+                </div>
+
+                <div class="value">
+                  ${user.address}
+                </div>
+              </div>
+
+              <button class="copy-btn"
+                onclick='copyData(${JSON.stringify(user)})'>
+
+                COPY DATA
+
+              </button>
+
+            </div>
+
+          </div>
+
+          `;
+
+        });
+
+      } catch (err) {
+
+        loading.style.display = "none";
+
+        alert("Error loading data");
+
+        console.log(err);
+
+      }
+
+    }
+
+    function copyData(user) {
+
+      const text =
+
+`Name: ${user.name}
+Mobile: ${user.mobile}
+CNIC: ${user.cnic}
+Address: ${user.address}
+Network: ${user.network}`;
+
+      navigator.clipboard.writeText(text);
+
+      alert("Copied");
+
+    }
+
+  </script>
+
+</body>
+
+</html>
